@@ -17,7 +17,7 @@ from knack.util import CLIError
 
 
 FP_CLIENT_ID = 'f1dd0a37-89c6-4e07-bcd1-ffd3d43d8875'
-
+FP_OBJECT_ID = '50c17c64-bc11-4fdd-a339-0ecd396bf911'
 
 def aro_create(cmd,  # pylint: disable=too-many-locals
                client,
@@ -58,22 +58,22 @@ def aro_create(cmd,  # pylint: disable=too-many-locals
     random_id = generate_random_id()
 
     aad = AADManager(cmd.cli_ctx)
-    if client_id is None:
-        app, client_secret = aad.create_application(cluster_resource_group or 'aro-' + random_id)
-        client_id = app.app_id
+    # if client_id is None:
+    #     app, client_secret = aad.create_application(cluster_resource_group or 'aro-' + random_id)
+    #     client_id = app.app_id
 
-    client_sp = aad.get_service_principal(client_id)
-    if not client_sp:
-        client_sp = aad.create_service_principal(client_id)
+    # client_sp = aad.get_service_principal(client_id)
+    # if not client_sp:
+    #     client_sp = aad.create_service_principal(client_id)
 
-    rp_client_id = FP_CLIENT_ID
-    if rp_mode_development():
-        rp_client_id = os.environ['AZURE_FP_CLIENT_ID']
+    # rp_client_id = FP_CLIENT_ID
+    # if rp_mode_development():
+    #     rp_client_id = os.environ['AZURE_FP_CLIENT_ID']
 
-    rp_client_sp = aad.get_service_principal(rp_client_id)
+    #rp_client_sp = aad.get_service_principal(rp_client_id)
 
-    assign_contributor_to_vnet(cmd.cli_ctx, vnet, client_sp.object_id)
-    assign_contributor_to_vnet(cmd.cli_ctx, vnet, rp_client_sp.object_id)
+    #assign_contributor_to_vnet(cmd.cli_ctx, vnet, client_sp.object_id)
+    assign_contributor_to_vnet(cmd.cli_ctx, vnet, FP_OBJECT_ID)
 
     if rp_mode_development():
         worker_vm_size = worker_vm_size or 'Standard_D2s_v3'
